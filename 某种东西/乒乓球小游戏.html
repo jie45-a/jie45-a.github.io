@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乒乓球</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; background: #0a0a1a; font-family: 'Segoe UI', sans-serif;
+  user-select: none;
+}
+canvas { border: 2px solid #333; background: #111; display: block; }
+.info { text-align: center; color: #aaa; margin-top: 12px; font-size: 13px; }
+.btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+.btns button {
+  background: #f0a500; color: #000; border: none; padding: 8px 22px;
+  border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer;
+  letter-spacing: 1px; transition: background 0.2s;
+}
+.btns button:hover { background: #d49000; }
+</style>
+</head>
+<body>
+<div style="text-align:center">
+  <canvas id="c" width="600" height="400"></canvas>
+  <div class="btns">
+    <button id="startBtn">开始</button>
+    <button id="pauseBtn">暂停</button>
+  </div>
+  <div class="info">玩家: W/S 或 ↑/↓ | 空格暂停 | 先到7分获胜</div>
+</div>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+const W = c.width, H = c.height;
+const WIN_SCORE = 7;
+
+// 球拍
+const PADDLE_W = 12, PADDLE_H = 80;
+const player = { x: 20, y: H / 2 - PADDLE_H / 2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 };
+const ai     = { x: W - 32, y: H / 2 - PADDLE_H / 2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 };
+
+// 球
+const ball = { x: W / 2, y: H / 2, r: 7, dx: 4, dy: 2.5, speed: 4 };
+
+let running = false, paused = false, loop = null, winner = null;
+
+function resetBall() {
+  ball.x = W / 2; ball.y = H / 2;
+  ball.speed = 4;
+  const angle = (Math.random() * 0.8 - 0.4) * Math.PI; // 随机角度 ±72°
+  ball.dx = ball.speed * (Math.random() > 0.5 ? 1 : -1);
+  ball.dy = ball.speed * Math.sin(angle);
+}
+
+function reset() {
+  player.y = H / 2 - PADDLE_H / 2;
+  player.score = 0;
+  ai.y = H / 2 - PADDLE_H / 2;
+  ai.score = 0;
+  winner = null;
+  resetBall();
+}
+
+function update() {
+  // 玩家移动
+  player.y += player.dy;
+  if (player.y < 0) player.y = 0;
+  if (player.y + player.h > H) player.y = H - player.h;
+
+  // AI 追踪
+  const aiCenter = ai.y + ai.h / 2;
+  const speed = 3.5;
+  if (ball.y < aiCenter - 15) ai.y -= speed;
+  else if (ball.y > aiCenter + 15) ai.y += speed;
+  if (ai.y < 0) ai.y = 0;
+  if (ai.y + ai.h > H) ai.y = H - ai.h;
+
+  // 球移动
+  ball.x += ball.dx;
+  ball.y += ball.dy;
+
+  // 上下边界反弹
+  if (ball.y - ball.r <= 0) {
+    ball.y = ball.r;
+    ball.dy = -ball.dy;
+  }
+  if (ball.y + ball.r >= H) {
+    ball.y = H - ball.r;
+    ball.dy = -ball.dy;
+  }
+
+  // 玩家球拍碰撞
+  if (ball.x - ball.r <= player.x + player.w &&
+      ball.x + ball.r >= player.x &&
+      ball.y >= player.y && ball.y <= player.y + player.h) {
+    ball.x = player.x + player.w + ball.r;
+    const hitPos = (ball.y - player.y) / player.h;
+    const angle = (hitPos - 0.5) * Math.PI * 0.6;
+    ball.speed = Math.min(ball.speed + 0.3, 9);
+    ball.dx = Math.abs(ball.speed * Math.cos(angle));
+    ball.dy = ball.speed * Math.sin(angle);
+  }
+
+  // AI 球拍碰撞
+  if (ball.x + ball.r >= ai.x &&
+      ball.x - ball.r <= ai.x + ai.w &&
+      ball.y >= ai.y && ball.y <= ai.y + ai.h) {
+    ball.x = ai.x - ball.r;
+    const hitPos = (ball.y - ai.y) / ai.h;
+    const angle = (hitPos - 0.5) * Math.PI * 0.6;
+    ball.speed = Math.min(ball.speed + 0.3, 9);
+    ball.dx = -Math.abs(ball.speed * Math.cos(angle));
+    ball.dy = ball.speed * Math.sin(angle);
+  }
+
+  // 得分检测
+  if (ball.x < 0) { ai.score++; checkWin(); }
+  if (ball.x > W) { player.score++; checkWin(); }
+}
+
+function checkWin() {
+  if (player.score >= WIN_SCORE) { winner = 'player'; stop(); }
+  else if (ai.score >= WIN_SCORE) { winner = 'ai'; stop(); }
+  else resetBall();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // 中线
+  ctx.setLineDash([8, 8]);
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 球拍
+  ctx.fillStyle = '#00d4ff';
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+  ctx.fillStyle = '#ff6b6b';
+  ctx.fillRect(ai.x, ai.y, ai.w, ai.h);
+
+  // 球
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 比分
+  ctx.font = 'bold 40px "Segoe UI"';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.fillText(player.score, W / 4, 60);
+  ctx.fillText(ai.score, W * 3 / 4, 60);
+  ctx.fillStyle = '#fff';
+  ctx.fillText(player.score, W / 4, 60);
+  ctx.fillText(ai.score, W * 3 / 4, 60);
+  ctx.textAlign = 'start';
+
+  // 结束 / 暂停
+  if (!running || paused) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.font = 'bold 30px "Segoe UI"';
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    if (winner) {
+      ctx.fillText(winner === 'player' ? '🎉 你赢了！' : '😞 AI 赢了', W / 2, H / 2 - 10);
+    } else if (paused) {
+      ctx.fillText('已暂停', W / 2, H / 2 - 10);
+    } else {
+      ctx.fillText('乒乓球', W / 2, H / 2 - 10);
+      ctx.font = '16px "Segoe UI"';
+      ctx.fillStyle = '#aaa';
+      ctx.fillText('点击"开始"按钮', W / 2, H / 2 + 25);
+    }
+    ctx.textAlign = 'start';
+  }
+}
+
+function tick() { update(); draw(); }
+
+function stop() {
+  running = false;
+  clearInterval(loop);
+  loop = null;
+  draw();
+}
+
+function start() {
+  if (loop) clearInterval(loop);
+  if (winner) reset();
+  running = true;
+  paused = false;
+  document.getElementById('pauseBtn').textContent = '暂停';
+  loop = setInterval(tick, 1000 / 60);
+}
+
+function togglePause() {
+  if (!running) return;
+  paused = !paused;
+  if (paused) {
+    clearInterval(loop); loop = null;
+    document.getElementById('pauseBtn').textContent = '继续';
+  } else {
+    document.getElementById('pauseBtn').textContent = '暂停';
+    loop = setInterval(tick, 1000 / 60);
+  }
+  draw();
+}
+
+// 键盘
+const keys = {};
+document.addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); togglePause(); }
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault();
+});
+document.addEventListener('keyup', e => { keys[e.key] = false; });
+
+// 持续读取按键
+setInterval(() => {
+  if (keys['w'] || keys['W'] || keys['ArrowUp']) player.dy = -5;
+  else if (keys['s'] || keys['S'] || keys['ArrowDown']) player.dy = 5;
+  else player.dy = 0;
+}, 16);
+
+document.getElementById('startBtn').addEventListener('click', start);
+document.getElementById('pauseBtn').addEventListener('click', togglePause);
+
+reset();
+draw();
+</script>
+</body>
+</html>
