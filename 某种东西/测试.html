@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ 情绪疗愈站 - 放下烦恼，拥抱温暖</title>
+    <style>
+        :root {
+            --bg-start: #1a1a2e;
+            --bg-mid: #16213e;
+            --bg-end: #0f3460;
+            --accent: #e94560;
+            --warm: #f5a623;
+            --soft: #a8e6cf;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --text: #e0e0e0;
+            --text-light: #b0b0b0;
+            --golden: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #1a1a2e 100%);
+            background-size: 400% 400%;
+            animation: bgShift 20s ease infinite;
+            color: var(--text);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        @keyframes bgShift {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
+        /* ===== 星星粒子背景 ===== */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            animation: twinkle var(--dur) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.9;
+                transform: scale(1.8);
+            }
+        }
+
+        /* ===== 浮动光点 ===== */
+        .floating-light {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(40px);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatLight var(--dur) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+        @keyframes floatLight {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(var(--dx), var(--dy)) scale(1.3);
+            }
+            50% {
+                transform: translate(calc(var(--dx) * 1.5), calc(var(--dy) * -0.5)) scale(0.8);
+            }
+            75% {
+                transform: translate(calc(var(--dx) * -0.5), calc(var(--dy) * 1.2)) scale(1.1);
+            }
+        }
+
+        /* ===== 主容器 ===== */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 680px;
+            padding: 40px 24px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+
+        /* ===== 头部 ===== */
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .header .icon {
+            font-size: 56px;
+            animation: gentleBounce 2.5s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes gentleBounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-14px);
+            }
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-top: 8px;
+            background: linear-gradient(135deg, #ffd700, #ffaa44, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 6px;
+            letter-spacing: 2px;
+        }
+
+        /* ===== 情绪卡片 ===== */
+        .emotion-card {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px 28px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .emotion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 170, 68, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(168, 230, 207, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .emotion-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+        }
+        .emotion-card .label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .emotion-card .label::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(233, 69, 96, 0);
+            }
+        }
+        .emotion-card textarea {
+            width: 100%;
+            min-height: 160px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 18px;
+            color: #e8e8e8;
+            font-size: 1rem;
+            font-family: inherit;
+            line-height: 1.8;
+            resize: vertical;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .emotion-card textarea::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+            font-style: italic;
+        }
+        .emotion-card textarea:focus {
+            outline: none;
+            border-color: rgba(255, 170, 68, 0.5);
+            box-shadow: 0 0 30px rgba(255, 170, 68, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .char-count {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== 释放按钮 ===== */
+        .release-btn {
+            position: relative;
+            z-index: 1;
+            padding: 16px 48px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            letter-spacing: 3px;
+            color: #fff;
+            background: linear-gradient(135deg, #e94560, #c0392b);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 30px rgba(233, 69, 96, 0.3);
+            overflow: hidden;
+        }
+        .release-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .release-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(233, 69, 96, 0.45);
+            letter-spacing: 5px;
+        }
+        .release-btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        .release-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== 消散粒子 ===== */
+        .dissolve-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            font-size: 1.2rem;
+            color: #ffd700;
+            animation: dissolve var(--dur) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: var(--delay);
+        }
+        @keyframes dissolve {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rot));
+            }
+        }
+
+        /* ===== 正向肯定语卡片 ===== */
+        .affirmation-card {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 24px;
+            padding: 36px 28px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        .affirmation-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .affirmation-card .affirmation-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            animation: gentleBounce 2s ease-in-out infinite;
+        }
+        .affirmation-card .affirmation-text {
+            font-size: 1.3rem;
+            font-weight: 300;
+            line-height: 1.8;
+            letter-spacing: 2px;
+            color: #ffd700;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .affirmation-card .affirmation-text.fade {
+            opacity: 0;
+        }
+        .affirmation-card .refresh-hint {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 16px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        .affirmation-card .refresh-hint:hover {
+            color: #ffd700;
+        }
+
+        /* ===== 呼吸引导 ===== */
+        .breathing-section {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px 28px;
+            text-align: center;
+        }
+        .breathing-section h3 {
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .breath-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(168, 230, 207, 0.15) 0%, transparent 70%);
+            border: 2px solid rgba(168, 230, 207, 0.3);
+            transition: all 0.1s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .breath-circle .breath-text {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--soft);
+            transition: opacity 0.5s;
+            position: absolute;
+        }
+        .breath-circle.breathing {
+            animation: breathe 8s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%,
+            100% {
+                transform: scale(1);
+                border-color: rgba(168, 230, 207, 0.3);
+            }
+            40% {
+                transform: scale(1.6);
+                border-color: rgba(168, 230, 207, 0.7);
+            }
+            60% {
+                transform: scale(1.6);
+                border-color: rgba(168, 230, 207, 0.7);
+            }
+        }
+        .breath-guide {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+
+        /* ===== 正能量气泡 ===== */
+        .bubble {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 1px;
+            animation: rise var(--dur) linear infinite;
+            animation-delay: var(--delay);
+            white-space: nowrap;
+        }
+        @keyframes rise {
+            0% {
+                transform: translateY(105vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 24px 16px 40px;
+                gap: 24px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .emotion-card {
+                padding: 24px 18px;
+            }
+            .release-btn {
+                padding: 14px 36px;
+                font-size: 1rem;
+            }
+            .affirmation-card .affirmation-text {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 星星背景 -->
+    <div class="stars-container" id="starsContainer"></div>
+
+    <!-- 浮动光点 -->
+    <div class="floating-light" style="--dur:12s;--delay:0s;--dx:80px;--dy:-60px;width:200px;height:200px;background:rgba(233,69,96,0.12);top:15%;left:10%;"></div>
+    <div class="floating-light" style="--dur:15s;--delay:3s;--dx:-100px;--dy:50px;width:250px;height:250px;background:rgba(245,166,35,0.10);top:60%;right:8%;"></div>
+    <div class="floating-light" style="--dur:18s;--delay:6s;--dx:60px;--dy:80px;width:180px;height:180px;background:rgba(168,230,207,0.08);top:35%;left:60%;"></div>
+
+    <!-- 正能量气泡 -->
+    <div id="bubblesContainer"></div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+
+        <!-- 头部 -->
+        <div class="header">
+            <span class="icon">🕯️</span>
+            <h1>情绪疗愈站</h1>
+            <p class="subtitle">在这里，放下所有的不开心</p>
+        </div>
+
+        <!-- 情绪输入卡片 -->
+        <div class="emotion-card" id="emotionCard">
+            <div class="label">📝 把烦恼写下来吧</div>
+            <textarea
+            id="emotionInput"
+            placeholder="今天发生了什么让你不开心的事？&#10;没关系，这里很安全，尽情倾诉吧……&#10;&#10;比如：工作压力好大，感觉喘不过气……&#10;或者：和朋友吵架了，心里好难受……"
+            maxlength="1000"
+        ></textarea>
+        <div class="char-count">
+            <span id="charCount">0</span> / 1000
+        </div>
+    </div>
+
+    <!-- 释放按钮 -->
+    <button class="release-btn" id="releaseBtn" disabled>
+        ✨ 释 放 烦 恼 ✨
+    </button>
+
+    <!-- 正向肯定语卡片 -->
+    <div class="affirmation-card" id="affirmationCard">
+        <div class="affirmation-icon">💝</div>
+        <div class="affirmation-text" id="affirmationText"></div>
+        <div class="refresh-hint" id="refreshHint">💫 点击换一句新的鼓励</div>
+    </div>
+
+    <!-- 呼吸引导 -->
+    <div class="breathing-section">
+        <h3>🌬️ 深呼吸，放轻松</h3>
+        <div class="breath-circle" id="breathCircle">
+            <span class="breath-text" id="breathText">点击开始</span>
+        </div>
+        <p class="breath-guide" id="breathGuide">跟着节奏，慢慢呼吸</p>
+    </div>
+
+</div>
+
+<script>
+    (function() {
+        // ========== 星星背景 ==========
+        const starsContainer = document.getElementById('starsContainer');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--dur', (Math.random() * 3 + 2) + 's');
+            star.style.setProperty('--delay', Math.random() * 4 + 's');
+            starsContainer.appendChild(star);
+        }
+
+        // ========== 正能量气泡 ==========
+        const bubblesContainer = document.getElementById('bubblesContainer');
+        const bubbleMessages = [
+            '一切都会好起来的 🌸', '你值得被爱 💕', '你已经很棒了 ✨', '没关系，慢慢来 🍃',
+            '今天的你也在努力 🌟', '深呼吸，放轻松 🌬️', '你并不孤单 🤗', '相信自己 💪',
+            '每个明天都是新的 🌅', '温柔待己 💝', '你很珍贵 💎', '向前看 🌈',
+            '你已经做得很好了 🫂', '放下吧，轻装前行 🕊️', '阳光总在风雨后 ☀️', '你是独一无二的 🌻',
+        ];
+        for (let i = 0; i < 8; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.textContent = bubbleMessages[Math.floor(Math.random() * bubbleMessages.length)];
+            bubble.style.left = Math.random() * 85 + '%';
+            bubble.style.setProperty('--dur', (Math.random() * 15 + 20) + 's');
+            bubble.style.setProperty('--delay', Math.random() * 20 + 's');
+            bubble.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+            bubblesContainer.appendChild(bubble);
+        }
+        // 定期刷新气泡
+        setInterval(() => {
+            const bubbles = bubblesContainer.querySelectorAll('.bubble');
+            if (bubbles.length < 10) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                bubble.textContent = bubbleMessages[Math.floor(Math.random() * bubbleMessages
+                    .length)];
+                bubble.style.left = Math.random() * 85 + '%';
+                bubble.style.setProperty('--dur', (Math.random() * 15 + 20) + 's');
+                bubble.style.setProperty('--delay', '0s');
+                bubble.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+                bubblesContainer.appendChild(bubble);
+                bubble.addEventListener('animationend', () => bubble.remove());
+            }
+        }, 8000);
+
+        // ========== 字数统计 ==========
+        const emotionInput = document.getElementById('emotionInput');
+        const charCount = document.getElementById('charCount');
+        const releaseBtn = document.getElementById('releaseBtn');
+
+        emotionInput.addEventListener('input', () => {
+            const len = emotionInput.value.length;
+            charCount.textContent = len;
+            releaseBtn.disabled = len < 1;
+            if (len >= 900) {
+                charCount.style.color = '#e94560';
+            } else {
+                charCount.style.color = '';
+            }
+        });
+
+        // ========== 正向肯定语库 ==========
+        const affirmations = [
+            { text: '你的感受是真实的，也是值得被看见的。', icon: '💝' },
+            { text: '每一次倾诉，都是勇敢的开始。', icon: '🦋' },
+            { text: '你已经做得很好了，真的。', icon: '🌟' },
+            { text: '阴天之后，总会迎来晴空万里。', icon: '☀️' },
+            { text: '你值得被温柔对待，包括来自你自己的温柔。', icon: '🌸' },
+            { text: '放下不是放弃，而是为了更好地前行。', icon: '🕊️' },
+            { text: '世界上所有的美好，你都配得上。', icon: '✨' },
+            { text: '不必完美，做你自己就已经足够。', icon: '💎' },
+            { text: '今天的烦恼，明天看来可能只是一个小插曲。', icon: '🌈' },
+            { text: '你比自己想象中更坚强。', icon: '💪' },
+            { text: '允许自己难过，也允许自己慢慢好起来。', icon: '🍃' },
+            { text: '每一个平凡的日子，都藏着不平凡的温暖。', icon: '🕯️' },
+            { text: '你散发的光，可能正照亮着某个人的世界。', icon: '⭐' },
+            { text: '深呼吸，这个世界上有人在偷偷爱着你。', icon: '🤗' },
+            { text: '累的时候，就停一停。休息也是前进的一部分。', icon: '🌙' },
+            { text: '你已经跨越了那么多困难，这一次也可以。', icon: '🏔️' },
+            { text: '你的存在本身，就是一份礼物。', icon: '🎁' },
+            { text: '温柔地对待自己，就像对待最好的朋友那样。', icon: '💕' },
+        ];
+
+        let lastAffirmationIndex = -1;
+        const affirmationCard = document.getElementById('affirmationCard');
+        const affirmationText = document.getElementById('affirmationText');
+        const affirmationIcon = affirmationCard.querySelector('.affirmation-icon');
+        const refreshHint = document.getElementById('refreshHint');
+
+        function getRandomAffirmation() {
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * affirmations.length);
+            } while (idx === lastAffirmationIndex && affirmations.length > 1);
+            lastAffirmationIndex = idx;
+            return affirmations[idx];
+        }
+
+        function showAffirmation() {
+            const aff = getRandomAffirmation();
+            affirmationIcon.textContent = aff.icon;
+            affirmationText.textContent = aff.text;
+            affirmationText.classList.remove('fade');
+            affirmationCard.classList.add('visible');
+        }
+
+        function refreshAffirmation() {
+            const aff = getRandomAffirmation();
+            affirmationText.classList.add('fade');
+            setTimeout(() => {
+                affirmationIcon.textContent = aff.icon;
+                affirmationText.textContent = aff.text;
+                affirmationText.classList.remove('fade');
+            }, 400);
+        }
+
+        refreshHint.addEventListener('click', refreshAffirmation);
+
+        // ========== 释放按钮 - 消散动画 ==========
+        releaseBtn.addEventListener('click', () => {
+            const text = emotionInput.value.trim();
+            if (!text) return;
+
+            // 创建消散粒子
+            const rect = emotionInput.getBoundingClientRect();
+            const chars = text.split('');
+            const step = Math.max(1, Math.floor(chars.length / 60)); // 最多60个粒子
+
+            for (let i = 0; i < chars.length; i += step) {
+                const char = chars[i];
+                if (char.trim() === '') continue;
+
+                const particle = document.createElement('span');
+                particle.classList.add('dissolve-particle');
+                particle.textContent = char;
+
+                // 在输入框内随机分布
+                const x = rect.left + Math.random() * rect.width;
+                const y = rect.top + Math.random() * rect.height;
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+
+                // 随机飞散方向
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 80 + Math.random() * 200;
+                particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                particle.style.setProperty('--ty', Math.sin(angle) * distance - 60 + 'px');
+                particle.style.setProperty('--rot', (Math.random() - 0.5) * 360 + 'deg');
+                particle.style.setProperty('--dur', (0.8 + Math.random() * 1.5) + 's');
+                particle.style.setProperty('--delay', Math.random() * 0.3 + 's');
+
+                document.body.appendChild(particle);
+
+                // 动画结束后移除
+                particle.addEventListener('animationend', () => particle.remove());
+            }
+
+            // 输入框文字逐渐消失
+            emotionInput.style.transition = 'opacity 0.6s ease, color 0.6s ease';
+            emotionInput.style.opacity = '0';
+            emotionInput.style.color = 'transparent';
+
+            setTimeout(() => {
+                emotionInput.value = '';
+                emotionInput.style.opacity = '1';
+                emotionInput.style.color = '';
+                charCount.textContent = '0';
+                releaseBtn.disabled = true;
+            }, 600);
+
+            // 显示正向肯定语
+            setTimeout(() => showAffirmation(), 400);
+        });
+
+        // ========== 呼吸引导 ==========
+        const breathCircle = document.getElementById('breathCircle');
+        const breathText = document.getElementById('breathText');
+        const breathGuide = document.getElementById('breathGuide');
+        let isBreathing = false;
+        let breathPhase = 0;
+        let breathTimer = null;
+
+        const phases = [
+            { text: '吸气……', duration: 4000, guide: '慢慢用鼻子吸气，感受腹部鼓起' },
+            { text: '屏住……', duration: 2000, guide: '轻轻屏住呼吸' },
+            { text: '呼气……', duration: 4000, guide: '慢慢用嘴巴呼气，释放所有紧张' },
+            { text: '静息……', duration: 2000, guide: '感受此刻的宁静' },
+        ];
+
+        function runBreathCycle() {
+            if (!isBreathing) return;
+            const phase = phases[breathPhase];
+            breathText.textContent = phase.text;
+            breathGuide.textContent = phase.guide;
+            breathPhase = (breathPhase + 1) % phases.length;
+            breathTimer = setTimeout(runBreathCycle, phase.duration);
+        }
+
+        breathCircle.addEventListener('click', () => {
+            if (isBreathing) {
+                // 停止
+                isBreathing = false;
+                clearTimeout(breathTimer);
+                breathCircle.classList.remove('breathing');
+                breathText.textContent = '点击开始';
+                breathGuide.textContent = '跟着节奏，慢慢呼吸';
+            } else {
+                // 开始
+                isBreathing = true;
+                breathPhase = 0;
+                breathCircle.classList.add('breathing');
+                runBreathCycle();
+            }
+        });
+
+        // ========== 键盘快捷键 Ctrl+Enter 释放 ==========
+        emotionInput.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (!releaseBtn.disabled) {
+                    releaseBtn.click();
+                }
+            }
+        });
+
+        console.log('🕯️ 情绪疗愈站已就绪 —— 愿你被世界温柔以待。');
+    })();
+</script>
+</body>
+</html>
