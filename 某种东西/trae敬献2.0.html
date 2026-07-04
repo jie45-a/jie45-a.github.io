@@ -1,0 +1,1624 @@
+c:\Users\H1352\jie\open\某种东西\校园二手市场.html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 校园二手市场 - Campus Flea Market</title>
+    <style>
+        :root {
+            --primary: #4A90D9;
+            --primary-dark: #357ABD;
+            --accent: #FF6B6B;
+            --success: #51CF66;
+            --warning: #FFD43B;
+            --bg: #F0F4F8;
+            --card-bg: #FFFFFF;
+            --text: #2D3748;
+            --text-light: #718096;
+            --border: #E2E8F0;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.10);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ===== 顶部导航栏 ===== */
+        .navbar {
+            background: var(--card-bg);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        .navbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .nav-logo span {
+            font-size: 1.8rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 4px;
+        }
+        .nav-link {
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            transition: var(--transition);
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        .nav-link:hover {
+            background: var(--bg);
+            color: var(--primary);
+        }
+        .nav-link.active {
+            background: rgba(74, 144, 217, 0.12);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .nav-username {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .btn {
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(74, 144, 217, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #e55a5a;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            border-radius: 6px;
+        }
+        .btn-xs {
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            border-radius: 5px;
+        }
+
+        /* ===== 主容器 ===== */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 24px;
+        }
+
+        /* ===== 页面容器 ===== */
+        .page {
+            display: none;
+            animation: fadeSlideIn 0.35s ease;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== 卡片 ===== */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            border: 1px solid var(--border);
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ===== 表单 ===== */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: var(--bg);
+            color: var(--text);
+            font-family: inherit;
+        }
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.1);
+            background: white;
+        }
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ===== 商品网格 ===== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e8edf2, #dce3ea);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #c0c8d2;
+        }
+        .product-body {
+            padding: 16px;
+        }
+        .product-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 0.82rem;
+            color: var(--text-light);
+        }
+        .product-category {
+            background: rgba(74, 144, 217, 0.1);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+        }
+
+        /* ===== 搜索栏 ===== */
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .search-bar .form-input {
+            flex: 1;
+            min-width: 200px;
+        }
+        .search-bar .form-select {
+            width: 160px;
+        }
+
+        /* ===== 图片上传区 ===== */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg);
+            position: relative;
+        }
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(74, 144, 217, 0.04);
+        }
+        .upload-area.has-image {
+            padding: 0;
+            border: none;
+            background: none;
+        }
+        .upload-area img {
+            max-width: 100%;
+            max-height: 280px;
+            border-radius: var(--radius-sm);
+            object-fit: contain;
+        }
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        .upload-text {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ===== 聊天面板 ===== */
+        .chat-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 0;
+            height: 600px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .chat-sidebar {
+            background: #fafbfc;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+        .chat-sidebar-header {
+            padding: 16px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            background: white;
+            position: sticky;
+            top: 0;
+        }
+        .chat-contact {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border);
+        }
+        .chat-contact:hover {
+            background: #eef2f7;
+        }
+        .chat-contact.active {
+            background: rgba(74, 144, 217, 0.1);
+            border-left: 3px solid var(--primary);
+        }
+        .chat-contact-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c9bd2, #4A90D9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .chat-contact-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .chat-contact-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .chat-contact-last {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-main {
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+        .chat-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            background: #fafbfc;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-msg {
+            max-width: 70%;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            word-break: break-word;
+            animation: msgIn 0.25s ease;
+        }
+        @keyframes msgIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .chat-msg.sent {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg.received {
+            align-self: flex-start;
+            background: #eef2f7;
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-msg-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .chat-input-area {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            background: #fafbfc;
+        }
+        .chat-input-area .form-input {
+            flex: 1;
+        }
+        .chat-empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chat-empty-icon {
+            font-size: 4rem;
+            opacity: 0.4;
+        }
+
+        /* ===== 模态框 ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .modal {
+            background: white;
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.3s ease;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* ===== 标签切换 ===== */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 24px;
+        }
+        .tab {
+            padding: 10px 24px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: var(--transition);
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-size: 0.95rem;
+        }
+        .tab:hover {
+            color: var(--primary);
+        }
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            z-index: 9999;
+            font-weight: 500;
+            animation: toastIn 0.35s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .toast.success {
+            background: #2d8a4e;
+        }
+        .toast.error {
+            background: #c0392b;
+        }
+
+        /* ===== 收款码展示 ===== */
+        .qrcode-display {
+            text-align: center;
+            padding: 16px;
+        }
+        .qrcode-display img {
+            max-width: 220px;
+            max-height: 220px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .qrcode-label {
+            font-weight: 600;
+            margin-top: 8px;
+            color: var(--text-light);
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .navbar-inner {
+                padding: 0 12px;
+            }
+            .nav-links {
+                gap: 0;
+            }
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            .form-row,
+            .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 12px;
+            }
+            .chat-container {
+                grid-template-columns: 1fr;
+            }
+            .chat-sidebar {
+                display: none;
+            }
+            .search-bar {
+                flex-direction: column;
+            }
+            .search-bar .form-select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 导航栏 ==================== -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <div class="nav-logo" onclick="navigateTo('home')">
+                <span>🎓</span> 校园二手
+            </div>
+            <div class="nav-links" id="navLinks">
+                <button class="nav-link active" data-page="home">🏠 首页</button>
+                <button class="nav-link" data-page="chat" id="navChatBtn" style="display:none">💬 消息</button>
+                <button class="nav-link" data-page="myProducts" id="navMyProducts" style="display:none">📦 我的商品</button>
+                <button class="nav-link" data-page="sell" id="navSell" style="display:none">➕ 上架</button>
+            </div>
+            <div class="nav-user" id="navUser">
+                <button class="btn btn-primary btn-sm" onclick="showLoginModal()">🔑 登录 / 注册</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== 主容器 ==================== -->
+    <div class="main-container">
+
+        <!-- 首页 -->
+        <div class="page active" id="page-home">
+            <div class="search-bar">
+                <input type="text" class="form-input" placeholder="🔍 搜索商品名称..." id="searchInput" oninput="renderProducts()">
+                <select class="form-select" id="categoryFilter" onchange="renderProducts()">
+                    <option value="">📂 全部分类</option>
+                    <option value="📚 教材教辅">📚 教材教辅</option>
+                    <option value="💻 数码电子">💻 数码电子</option>
+                    <option value="👗 服饰鞋包">👗 服饰鞋包</option>
+                    <option value="🏠 生活用品">🏠 生活用品</option>
+                    <option value="🎮 运动娱乐">🎮 运动娱乐</option>
+                    <option value="🎨 文具用品">🎨 文具用品</option>
+                    <option value="🔧 其他">🔧 其他</option>
+                </select>
+                <select class="form-select" id="sortBy" onchange="renderProducts()">
+                    <option value="newest">🕐 最新发布</option>
+                    <option value="priceAsc">💰 价格从低到高</option>
+                    <option value="priceDesc">💎 价格从高到低</option>
+                </select>
+            </div>
+            <div class="product-grid" id="productGrid"></div>
+            <div style="text-align:center;padding:40px;color:var(--text-light);display:none" id="emptyProducts">
+                🛒 暂无商品，快去上架第一件吧！
+            </div>
+        </div>
+
+        <!-- 聊天页 -->
+        <div class="page" id="page-chat">
+            <div class="chat-container">
+                <div class="chat-sidebar" id="chatSidebar">
+                    <div class="chat-sidebar-header">💬 会话列表</div>
+                    <div id="chatContactList"></div>
+                </div>
+                <div class="chat-main" id="chatMain">
+                    <div class="chat-empty" id="chatEmpty">
+                        <div class="chat-empty-icon">💬</div>
+                        <div>选择一个会话开始聊天</div>
+                    </div>
+                    <div id="chatActive" style="display:none;flex-direction:column;flex:1;">
+                        <div class="chat-header" id="chatActiveHeader"></div>
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-input-area">
+                            <input type="text" class="form-input" id="chatInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendMessage()">
+                            <button class="btn btn-primary btn-sm" onclick="sendMessage()">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 我的商品页 -->
+        <div class="page" id="page-myProducts">
+            <div class="card">
+                <div class="card-title">📦 我发布的商品</div>
+                <div class="product-grid" id="myProductGrid"></div>
+                <div style="text-align:center;padding:40px;color:var(--text-light);display:none" id="emptyMyProducts">
+                    你还没有发布任何商品，快去上架吧！
+                </div>
+            </div>
+        </div>
+
+        <!-- 上架商品页 -->
+        <div class="page" id="page-sell">
+            <div class="card" style="max-width:700px;margin:0 auto;">
+                <div class="card-title">➕ 发布新商品</div>
+                <div class="form-group">
+                    <label class="form-label">商品图片</label>
+                    <div class="upload-area" id="productImageUpload" onclick="document.getElementById('productImageInput').click()">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">点击上传商品图片（可选）</div>
+                    </div>
+                    <input type="file" id="productImageInput" accept="image/*" style="display:none" onchange="handleProductImageUpload(event)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">商品名称 *</label>
+                    <input type="text" class="form-input" id="sellTitle" placeholder="例如：九成新高等数学教材">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">价格 (¥) *</label>
+                        <input type="number" class="form-input" id="sellPrice" placeholder="0.00" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">分类 *</label>
+                        <select class="form-select" id="sellCategory">
+                            <option value="">请选择分类</option>
+                            <option value="📚 教材教辅">📚 教材教辅</option>
+                            <option value="💻 数码电子">💻 数码电子</option>
+                            <option value="👗 服饰鞋包">👗 服饰鞋包</option>
+                            <option value="🏠 生活用品">🏠 生活用品</option>
+                            <option value="🎮 运动娱乐">🎮 运动娱乐</option>
+                            <option value="🎨 文具用品">🎨 文具用品</option>
+                            <option value="🔧 其他">🔧 其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">商品描述</label>
+                    <textarea class="form-textarea" id="sellDesc" placeholder="描述商品的使用情况、新旧程度等信息..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="publishProduct()" style="width:100%;justify-content:center;">📢 发布商品</button>
+            </div>
+        </div>
+
+        <!-- 个人中心页 -->
+        <div class="page" id="page-profile">
+            <div class="card" style="max-width:700px;margin:0 auto;">
+                <div class="card-title">👤 个人中心</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">用户名</label>
+                        <input type="text" class="form-input" id="profileUsername" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">角色</label>
+                        <input type="text" class="form-input" id="profileRole" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">真实姓名</label>
+                        <input type="text" class="form-input" id="profileName">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">学号</label>
+                        <input type="text" class="form-input" id="profileStudentId">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">手机号码</label>
+                    <input type="text" class="form-input" id="profilePhone">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">📱 收款码（微信/支付宝）</label>
+                    <div class="upload-area" id="qrcodeUpload" onclick="document.getElementById('qrcodeInput').click()">
+                        <div class="upload-icon">📱</div>
+                        <div class="upload-text">点击上传收款码图片</div>
+                    </div>
+                    <input type="file" id="qrcodeInput" accept="image/*" style="display:none" onchange="handleQRCodeUpload(event)">
+                </div>
+                <button class="btn btn-primary" onclick="saveProfile()" style="width:100%;justify-content:center;">💾 保存信息</button>
+                <button class="btn btn-outline" onclick="logout()" style="width:100%;justify-content:center;margin-top:10px;">🚪 退出登录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 登录/注册模态框 ==================== -->
+    <div class="modal-overlay" id="loginModal" style="display:none;">
+        <div class="modal">
+            <div class="tabs" id="loginTabs">
+                <button class="tab active" data-tab="login">🔑 登录</button>
+                <button class="tab" data-tab="register">📝 注册</button>
+            </div>
+
+            <!-- 登录表单 -->
+            <div id="form-login">
+                <div class="form-group">
+                    <label class="form-label">用户名</label>
+                    <input type="text" class="form-input" id="loginUsername" placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">密码</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" onkeydown="if(event.key==='Enter')login()">
+                </div>
+                <button class="btn btn-primary" onclick="login()" style="width:100%;justify-content:center;">🔓 登录</button>
+            </div>
+
+            <!-- 注册表单 -->
+            <div id="form-register" style="display:none;">
+                <div class="form-group">
+                    <label class="form-label">用户名 *</label>
+                    <input type="text" class="form-input" id="regUsername" placeholder="设置用户名">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">密码 *</label>
+                    <input type="password" class="form-input" id="regPassword" placeholder="设置密码（至少6位）">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">确认密码 *</label>
+                    <input type="password" class="form-input" id="regPassword2" placeholder="再次输入密码">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">角色 *</label>
+                    <select class="form-select" id="regRole">
+                        <option value="buyer">🛒 买家</option>
+                        <option value="seller">🏪 卖家</option>
+                        <option value="both">🔄 买家 & 卖家</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">真实姓名</label>
+                        <input type="text" class="form-input" id="regName" placeholder="您的姓名">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">学号</label>
+                        <input type="text" class="form-input" id="regStudentId" placeholder="校园学号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">手机号码</label>
+                    <input type="text" class="form-input" id="regPhone" placeholder="联系电话">
+                </div>
+                <button class="btn btn-primary" onclick="register()" style="width:100%;justify-content:center;">✅ 创建账户</button>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-outline btn-sm" onclick="closeLoginModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 商品详情模态框 ==================== -->
+    <div class="modal-overlay" id="productDetailModal" style="display:none;">
+        <div class="modal" style="max-width:600px;">
+            <div id="productDetailContent"></div>
+            <div class="modal-actions">
+                <button class="btn btn-outline btn-sm" onclick="closeProductDetail()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 数据存储 ====================
+        const STORAGE_KEY = 'campus_market_data';
+
+        function getData() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                const initial = {
+                    users: [],
+                    products: [],
+                    messages: [],
+                    currentUserId: null
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
+                return initial;
+            }
+            return JSON.parse(raw);
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function getCurrentUser() {
+            const data = getData();
+            if (!data.currentUserId) return null;
+            return data.users.find(u => u.id === data.currentUserId) || null;
+        }
+
+        // ==================== Toast ====================
+        function showToast(msg, type = '') {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2800);
+        }
+
+        // ==================== 导航 ====================
+        function navigateTo(page) {
+            if (page === 'chat' || page === 'myProducts' || page === 'sell' || page === 'profile') {
+                if (!getCurrentUser()) {
+                    showToast('请先登录！', 'error');
+                    showLoginModal();
+                    return;
+                }
+            }
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById('page-' + page);
+            if (target) target.classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const navLink = document.querySelector(`[data-page="${page}"]`);
+            if (navLink) navLink.classList.add('active');
+
+            if (page === 'home') renderProducts();
+            if (page === 'chat') renderChatContacts();
+            if (page === 'myProducts') renderMyProducts();
+            if (page === 'profile') loadProfile();
+            if (page === 'sell') resetSellForm();
+        }
+
+        document.getElementById('navLinks').addEventListener('click', function(e) {
+            if (e.target.classList.contains('nav-link')) {
+                navigateTo(e.target.dataset.page);
+            }
+        });
+
+        // ==================== 登录/注册模态框 ====================
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+            switchLoginTab('login');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) closeLoginModal();
+        });
+
+        function switchLoginTab(tab) {
+            document.querySelectorAll('#loginTabs .tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`#loginTabs [data-tab="${tab}"]`).classList.add('active');
+            document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+        }
+
+        document.getElementById('loginTabs').addEventListener('click', function(e) {
+            if (e.target.classList.contains('tab')) {
+                switchLoginTab(e.target.dataset.tab);
+            }
+        });
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if (!username || !password) {
+                showToast('请输入用户名和密码', 'error');
+                return;
+            }
+            const data = getData();
+            const user = data.users.find(u => u.username === username && u.password === password);
+            if (!user) {
+                showToast('用户名或密码错误', 'error');
+                return;
+            }
+            data.currentUserId = user.id;
+            saveData(data);
+            closeLoginModal();
+            updateNavUI();
+            showToast('登录成功！欢迎回来，' + user.username + ' 🎉', 'success');
+            navigateTo('home');
+        }
+
+        function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const password2 = document.getElementById('regPassword2').value.trim();
+            const role = document.getElementById('regRole').value;
+            const name = document.getElementById('regName').value.trim();
+            const studentId = document.getElementById('regStudentId').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+
+            if (!username || !password || !role) {
+                showToast('请填写必填字段（用户名、密码、角色）', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                showToast('密码至少需要6位', 'error');
+                return;
+            }
+            if (password !== password2) {
+                showToast('两次密码不一致', 'error');
+                return;
+            }
+            const data = getData();
+            if (data.users.find(u => u.username === username)) {
+                showToast('该用户名已被注册', 'error');
+                return;
+            }
+            const newUser = {
+                id: 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                username,
+                password,
+                role,
+                name,
+                studentId,
+                phone,
+                paymentQR: null,
+                avatar: null,
+                createdAt: new Date().toISOString()
+            };
+            data.users.push(newUser);
+            data.currentUserId = newUser.id;
+            saveData(data);
+            closeLoginModal();
+            updateNavUI();
+            showToast('注册成功！欢迎加入校园二手市场 🎓', 'success');
+            navigateTo('home');
+        }
+
+        // ==================== 更新导航UI ====================
+        function updateNavUI() {
+            const user = getCurrentUser();
+            const navUser = document.getElementById('navUser');
+            const navChatBtn = document.getElementById('navChatBtn');
+            const navMyProducts = document.getElementById('navMyProducts');
+            const navSell = document.getElementById('navSell');
+            const navLinks = document.getElementById('navLinks');
+
+            if (user) {
+                navUser.innerHTML = `
+                    <div class="nav-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                    <span class="nav-username">${user.username}</span>
+                    <button class="btn btn-outline btn-xs" onclick="navigateTo('profile')">⚙️</button>
+                `;
+                navChatBtn.style.display = 'inline-block';
+                navMyProducts.style.display = 'inline-block';
+                if (user.role === 'seller' || user.role === 'both') {
+                    navSell.style.display = 'inline-block';
+                } else {
+                    navSell.style.display = 'none';
+                }
+            } else {
+                navUser.innerHTML = '<button class="btn btn-primary btn-sm" onclick="showLoginModal()">🔑 登录 / 注册</button>';
+                navChatBtn.style.display = 'none';
+                navMyProducts.style.display = 'none';
+                navSell.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            const data = getData();
+            data.currentUserId = null;
+            saveData(data);
+            updateNavUI();
+            showToast('已退出登录 👋');
+            navigateTo('home');
+        }
+
+        // ==================== 商品渲染 ====================
+        function renderProducts() {
+            const data = getData();
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
+
+            let products = [...data.products];
+
+            if (searchTerm) {
+                products = products.filter(p => p.title.toLowerCase().includes(searchTerm));
+            }
+            if (categoryFilter) {
+                products = products.filter(p => p.category === categoryFilter);
+            }
+
+            if (sortBy === 'newest') {
+                products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            } else if (sortBy === 'priceAsc') {
+                products.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'priceDesc') {
+                products.sort((a, b) => b.price - a.price);
+            }
+
+            const grid = document.getElementById('productGrid');
+            const empty = document.getElementById('emptyProducts');
+
+            if (products.length === 0) {
+                grid.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+
+            grid.innerHTML = products.map(p => {
+                const seller = data.users.find(u => u.id === p.sellerId);
+                const sellerName = seller ? seller.username : '未知用户';
+                const imgHTML = p.image ?
+                    `<img src="${p.image}" class="product-img" alt="${p.title}" style="object-fit:cover;">` :
+                    `<div class="product-img">📦</div>`;
+                return `
+                    <div class="product-card" onclick="showProductDetail('${p.id}')">
+                        ${imgHTML}
+                        <div class="product-body">
+                            <div class="product-title">${escapeHTML(p.title)}</div>
+                            <div class="product-price">¥${p.price.toFixed(2)}</div>
+                            <div class="product-meta">
+                                <span class="product-category">${p.category}</span>
+                                <span>${sellerName}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // ==================== 商品详情 ====================
+        let currentProductId = null;
+
+        function showProductDetail(productId) {
+            const data = getData();
+            const product = data.products.find(p => p.id === productId);
+            if (!product) return;
+            currentProductId = productId;
+            const seller = data.users.find(u => u.id === product.sellerId);
+            const sellerName = seller ? seller.username : '未知用户';
+            const currentUser = getCurrentUser();
+            const isOwner = currentUser && currentUser.id === product.sellerId;
+
+            const imgHTML = product.image ?
+                `<img src="${product.image}" style="width:100%;max-height:300px;object-fit:contain;border-radius:12px;margin-bottom:16px;">` :
+                '';
+
+            let qrHTML = '';
+            if (seller && seller.paymentQR) {
+                qrHTML = `
+                    <div class="qrcode-display" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+                        <div class="qrcode-label">📱 卖家收款码</div>
+                        <img src="${seller.paymentQR}" alt="收款码">
+                    </div>`;
+            }
+
+            let actionHTML = '';
+            if (currentUser && !isOwner && (seller)) {
+                actionHTML = `
+                    <button class="btn btn-primary btn-sm" onclick="startChatWithSeller('${product.sellerId}','${product.id}')" style="margin-top:12px;">
+                        💬 联系卖家
+                    </button>`;
+            }
+            if (isOwner) {
+                actionHTML = `
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('${product.id}')" style="margin-top:12px;">
+                        🗑️ 删除商品
+                    </button>`;
+            }
+
+            document.getElementById('productDetailContent').innerHTML = `
+                <div class="modal-title">${escapeHTML(product.title)}</div>
+                ${imgHTML}
+                <div style="font-size:1.6rem;font-weight:700;color:var(--accent);margin-bottom:8px;">¥${product.price.toFixed(2)}</div>
+                <div style="margin-bottom:8px;"><span class="product-category">${product.category}</span></div>
+                <div style="color:var(--text-light);margin-bottom:8px;">卖家：${escapeHTML(sellerName)}</div>
+                <div style="line-height:1.8;">${escapeHTML(product.description || '暂无描述')}</div>
+                ${qrHTML}
+                ${actionHTML}
+            `;
+            document.getElementById('productDetailModal').style.display = 'flex';
+        }
+
+        function closeProductDetail() {
+            document.getElementById('productDetailModal').style.display = 'none';
+            currentProductId = null;
+        }
+
+        document.getElementById('productDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeProductDetail();
+        });
+
+        function deleteProduct(productId) {
+            if (!confirm('确定要删除这个商品吗？')) return;
+            const data = getData();
+            data.products = data.products.filter(p => p.id !== productId);
+            saveData(data);
+            closeProductDetail();
+            renderProducts();
+            renderMyProducts();
+            showToast('商品已删除', 'success');
+        }
+
+        // ==================== 上架商品 ====================
+        let tempProductImage = null;
+
+        function handleProductImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                tempProductImage = e.target.result;
+                const area = document.getElementById('productImageUpload');
+                area.classList.add('has-image');
+                area.innerHTML = `<img src="${tempProductImage}" alt="预览">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetSellForm() {
+            document.getElementById('sellTitle').value = '';
+            document.getElementById('sellPrice').value = '';
+            document.getElementById('sellCategory').value = '';
+            document.getElementById('sellDesc').value = '';
+            tempProductImage = null;
+            const area = document.getElementById('productImageUpload');
+            area.classList.remove('has-image');
+            area.innerHTML = '<div class="upload-icon">📷</div><div class="upload-text">点击上传商品图片（可选）</div>';
+            document.getElementById('productImageInput').value = '';
+        }
+
+        function publishProduct() {
+            const user = getCurrentUser();
+            if (!user) {
+                showToast('请先登录！', 'error');
+                return;
+            }
+            if (user.role !== 'seller' && user.role !== 'both') {
+                showToast('只有卖家才能发布商品，请在个人中心修改角色', 'error');
+                return;
+            }
+            const title = document.getElementById('sellTitle').value.trim();
+            const price = parseFloat(document.getElementById('sellPrice').value);
+            const category = document.getElementById('sellCategory').value;
+            const desc = document.getElementById('sellDesc').value.trim();
+
+            if (!title) { showToast('请输入商品名称', 'error'); return; }
+            if (isNaN(price) || price < 0) { showToast('请输入有效的价格', 'error'); return; }
+            if (!category) { showToast('请选择分类', 'error'); return; }
+
+            const data = getData();
+            const newProduct = {
+                id: 'p_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                sellerId: user.id,
+                title,
+                price,
+                category,
+                description: desc,
+                image: tempProductImage,
+                status: 'active',
+                createdAt: new Date().toISOString()
+            };
+            data.products.push(newProduct);
+            saveData(data);
+            resetSellForm();
+            showToast('商品发布成功！🎉', 'success');
+            navigateTo('home');
+        }
+
+        // ==================== 我的商品 ====================
+        function renderMyProducts() {
+            const user = getCurrentUser();
+            if (!user) return;
+            const data = getData();
+            const myProducts = data.products.filter(p => p.sellerId === user.id);
+            const grid = document.getElementById('myProductGrid');
+            const empty = document.getElementById('emptyMyProducts');
+
+            if (myProducts.length === 0) {
+                grid.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+            grid.innerHTML = myProducts.map(p => {
+                const imgHTML = p.image ?
+                    `<img src="${p.image}" class="product-img" alt="${p.title}" style="object-fit:cover;">` :
+                    `<div class="product-img">📦</div>`;
+                return `
+                    <div class="product-card" onclick="showProductDetail('${p.id}')">
+                        ${imgHTML}
+                        <div class="product-body">
+                            <div class="product-title">${escapeHTML(p.title)}</div>
+                            <div class="product-price">¥${p.price.toFixed(2)}</div>
+                            <div class="product-meta">
+                                <span class="product-category">${p.category}</span>
+                                <span>${new Date(p.createdAt).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        // ==================== 个人中心 ====================
+        function loadProfile() {
+            const user = getCurrentUser();
+            if (!user) return;
+            document.getElementById('profileUsername').value = user.username;
+            document.getElementById('profileRole').value = user.role === 'both' ? '买家 & 卖家' : (user.role === 'seller' ? '卖家' : '买家');
+            document.getElementById('profileName').value = user.name || '';
+            document.getElementById('profileStudentId').value = user.studentId || '';
+            document.getElementById('profilePhone').value = user.phone || '';
+
+            const area = document.getElementById('qrcodeUpload');
+            if (user.paymentQR) {
+                area.classList.add('has-image');
+                area.innerHTML = `<img src="${user.paymentQR}" alt="收款码">`;
+            } else {
+                area.classList.remove('has-image');
+                area.innerHTML = '<div class="upload-icon">📱</div><div class="upload-text">点击上传收款码图片</div>';
+            }
+        }
+
+        function handleQRCodeUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = getData();
+                const user = data.users.find(u => u.id === data.currentUserId);
+                if (user) {
+                    user.paymentQR = e.target.result;
+                    saveData(data);
+                }
+                const area = document.getElementById('qrcodeUpload');
+                area.classList.add('has-image');
+                area.innerHTML = `<img src="${e.target.result}" alt="收款码">`;
+                showToast('收款码上传成功！📱', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveProfile() {
+            const data = getData();
+            const user = data.users.find(u => u.id === data.currentUserId);
+            if (!user) return;
+            user.name = document.getElementById('profileName').value.trim();
+            user.studentId = document.getElementById('profileStudentId').value.trim();
+            user.phone = document.getElementById('profilePhone').value.trim();
+            saveData(data);
+            updateNavUI();
+            showToast('个人信息保存成功！✅', 'success');
+        }
+
+        // ==================== 聊天系统 ====================
+        let activeChatUserId = null;
+        let activeChatProductId = null;
+
+        function getChatContacts() {
+            const data = getData();
+            const currentUser = getCurrentUser();
+            if (!currentUser) return [];
+
+            const relevantMessages = data.messages.filter(
+                m => m.senderId === currentUser.id || m.receiverId === currentUser.id
+            );
+            const contactIds = new Set();
+            relevantMessages.forEach(m => {
+                if (m.senderId !== currentUser.id) contactIds.add(m.senderId);
+                if (m.receiverId !== currentUser.id) contactIds.add(m.receiverId);
+            });
+
+            const contacts = [];
+            contactIds.forEach(id => {
+                const user = data.users.find(u => u.id === id);
+                if (user) {
+                    const lastMsg = relevantMessages
+                        .filter(m => (m.senderId === id || m.receiverId === id))
+                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+                    contacts.push({
+                        user,
+                        lastMsg: lastMsg ? lastMsg.content : '',
+                        lastTime: lastMsg ? lastMsg.timestamp : '',
+                        productId: lastMsg ? lastMsg.productId : null
+                    });
+                }
+            });
+            contacts.sort((a, b) => new Date(b.lastTime) - new Date(a.lastTime));
+            return contacts;
+        }
+
+        function renderChatContacts() {
+            const contacts = getChatContacts();
+            const list = document.getElementById('chatContactList');
+            if (contacts.length === 0) {
+                list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-light);">暂无会话</div>';
+                return;
+            }
+            list.innerHTML = contacts.map(c => `
+                <div class="chat-contact ${activeChatUserId === c.user.id ? 'active' : ''}" 
+                     onclick="openChat('${c.user.id}', '${c.productId || ''}')">
+                    <div class="chat-contact-avatar">${c.user.username.charAt(0).toUpperCase()}</div>
+                    <div class="chat-contact-info">
+                        <div class="chat-contact-name">${escapeHTML(c.user.username)}</div>
+                        <div class="chat-contact-last">${escapeHTML(c.lastMsg.substring(0, 30))}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function startChatWithSeller(sellerId, productId) {
+            closeProductDetail();
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                showToast('请先登录！', 'error');
+                return;
+            }
+            if (currentUser.id === sellerId) {
+                showToast('不能和自己聊天哦', 'error');
+                return;
+            }
+            navigateTo('chat');
+            openChat(sellerId, productId);
+        }
+
+        function openChat(userId, productId) {
+            activeChatUserId = userId;
+            activeChatProductId = productId;
+            const data = getData();
+            const contact = data.users.find(u => u.id === userId);
+            if (!contact) return;
+
+            document.getElementById('chatEmpty').style.display = 'none';
+            document.getElementById('chatActive').style.display = 'flex';
+            document.getElementById('chatActiveHeader').textContent = '💬 与 ' + contact.username + ' 聊天中';
+
+            if (productId) {
+                const product = data.products.find(p => p.id === productId);
+                if (product) {
+                    document.getElementById('chatActiveHeader').textContent += ' - 关于：' + product.title;
+                }
+            }
+
+            renderChatMessages();
+            renderChatContacts();
+            setTimeout(() => {
+                const msgContainer = document.getElementById('chatMessages');
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            }, 100);
+        }
+
+        function renderChatMessages() {
+            const currentUser = getCurrentUser();
+            if (!currentUser || !activeChatUserId) return;
+            const data = getData();
+            const messages = data.messages.filter(
+                m => (m.senderId === currentUser.id && m.receiverId === activeChatUserId) ||
+                    (m.senderId === activeChatUserId && m.receiverId === currentUser.id)
+            ).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+            const container = document.getElementById('chatMessages');
+            if (messages.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:var(--text-light);padding:40px;">开始你们的第一次对话吧！👋</div>';
+                return;
+            }
+            container.innerHTML = messages.map(m => {
+                const isSent = m.senderId === currentUser.id;
+                const time = new Date(m.timestamp).toLocaleString('zh-CN', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                return `
+                    <div class="chat-msg ${isSent ? 'sent' : 'received'}">
+                        <div>${escapeHTML(m.content)}</div>
+                        <div class="chat-msg-time">${time}</div>
+                    </div>`;
+            }).join('');
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 50);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const content = input.value.trim();
+            if (!content || !activeChatUserId) return;
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+
+            const data = getData();
+            const message = {
+                id: 'm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                senderId: currentUser.id,
+                receiverId: activeChatUserId,
+                productId: activeChatProductId || null,
+                content,
+                timestamp: new Date().toISOString()
+            };
+            data.messages.push(message);
+            saveData(data);
+            input.value = '';
+            renderChatMessages();
+            renderChatContacts();
+        }
+
+        // 定时刷新聊天（模拟实时）
+        setInterval(() => {
+            const currentPage = document.querySelector('.page.active');
+            if (currentPage && currentPage.id === 'page-chat' && activeChatUserId) {
+                renderChatMessages();
+                renderChatContacts();
+            }
+        }, 3000);
+
+        // ==================== 初始化 ====================
+        function init() {
+            updateNavUI();
+            renderProducts();
+
+            // 点击上传区域重新上传
+            document.getElementById('productImageUpload').addEventListener('click', function(e) {
+                if (this.classList.contains('has-image')) {
+                    if (confirm('是否更换图片？')) {
+                        tempProductImage = null;
+                        this.classList.remove('has-image');
+                        this.innerHTML =
+                            '<div class="upload-icon">📷</div><div class="upload-text">点击上传商品图片（可选）</div>';
+                        document.getElementById('productImageInput').value = '';
+                        document.getElementById('productImageInput').click();
+                    }
+                    e.stopPropagation();
+                }
+            });
+
+            document.getElementById('qrcodeUpload').addEventListener('click', function(e) {
+                if (this.classList.contains('has-image')) {
+                    if (confirm('是否更换收款码？')) {
+                        const data = getData();
+                        const user = data.users.find(u => u.id === data.currentUserId);
+                        if (user) {
+                            user.paymentQR = null;
+                            saveData(data);
+                        }
+                        this.classList.remove('has-image');
+                        this.innerHTML =
+                            '<div class="upload-icon">📱</div><div class="upload-text">点击上传收款码图片</div>';
+                        document.getElementById('qrcodeInput').value = '';
+                        document.getElementById('qrcodeInput').click();
+                    }
+                    e.stopPropagation();
+                }
+            });
+        }
+
+        init();
+
+        console.log('🎓 校园二手市场已就绪！');
+        console.log('📋 功能：用户注册/登录 | 商品上架 | 在线聊天 | 收款码上传');
+        console.log('💾 数据存储：localStorage');
+    </script>
+</body>
+</html>
